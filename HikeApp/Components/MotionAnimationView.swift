@@ -22,6 +22,18 @@ struct MotionAnimationView: View {
         return CGFloat(Int.random(in: 4 ... 80))
     }
     
+    func randomScale() -> CGFloat {
+        return CGFloat(Double.random(in: 0.1 ... 2.0))
+    }
+    
+    func randomSpeed() -> Double {
+        return Double.random(in: 0.05 ... 1.0)
+    }
+    
+    func randomDelay() -> Double {
+        return Double.random(in: 1.0 ... 2.0)
+    }
+    
     var body: some View {
         ZStack {
             ForEach(0 ... randomCircle, id: \.self) { item in
@@ -31,12 +43,21 @@ struct MotionAnimationView: View {
                     .frame(width : randomSize())
                     .position(x : randomCoordinate(),
                               y : randomCoordinate())
-                    .onAppear(perform : {
-                        <#code#>
+                    .scaleEffect(isAnimating ? randomScale() : 1)
+                    .onAppear(perform: {
+                        withAnimation(
+                            .interpolatingSpring(stiffness : 0.25, damping : 0.25)
+                            .repeatForever()
+                            .speed(randomSpeed())
+                            .delay(randomDelay())) {
+                            isAnimating = true
+                        }
                     })
             }
         }
         .frame(width: 256, height: 256)
+        .mask(Circle())
+        .drawingGroup()
     }
 }
 
