@@ -8,6 +8,16 @@
 import SwiftUI
 
 struct SettingsView: View {
+    
+    private let alternativeAppIcon : [String] = [
+        "AppIcon-Backpack",
+        "AppIcon-Camera",
+        "AppIcon-Campfire",
+        "AppIcon-MagnifyingGlass",
+        "AppIcon-Map",
+        "AppIcon-Mushroom"
+        
+    ]
     var body: some View {
         List {
             Section {
@@ -47,6 +57,45 @@ struct SettingsView: View {
                 .padding(.bottom , 16)
                 .frame(maxWidth : .infinity)
                 
+            }
+            .listRowSeparator(.hidden)
+            
+            Section(header: Text("ALTERNATE ICONS")) {
+                
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing : 12){
+                        ForEach(alternativeAppIcon.indices, id: \.self) { item in
+                            Button {
+                                print("Icon \(alternativeAppIcon[item]) was pressed")
+                                UIApplication.shared.setAlternateIconName(alternativeAppIcon[item]) {error in
+                                    if error != nil {
+                                        print("Failed to change the App Icon : \(String(describing: error?.localizedDescription))")
+                                    }
+                                    
+                                }
+                                
+                                
+                            }
+                            label : {
+                                Image("\(alternativeAppIcon[item])-Preview")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width : 80, height : 80)
+                                    .cornerRadius(16)
+                            }
+                        }
+                    }
+                }
+                .padding(.top, 12)
+                Text("Choose your favourite app icon from the collection above.")
+                    .frame(maxWidth : .infinity)
+                    .font(.footnote)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(.secondary)
+                    .padding(.bottom, 12)
+                  
+                    
+                    
             }
             .listRowSeparator(.hidden)
             
